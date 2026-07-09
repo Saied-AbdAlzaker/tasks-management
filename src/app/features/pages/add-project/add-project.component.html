@@ -1,0 +1,156 @@
+<section class="min-h-screen bg-slate-50 py-6 lg:py-10">
+  <!-- Page Header -->
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 mb-6">
+    <!-- Breadcrumb -->
+    <div
+      class="hidden lg:flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500"
+    >
+      <a routerLink="/projects" class="hover:text-primary">Projects</a>
+      <span>›</span>
+      <span class="text-primary">Add New Project</span>
+    </div>
+
+    <h2 class="mt-3 text-2xl lg:text-4xl font-bold text-slate-900">
+      Add New Project
+    </h2>
+  </div>
+
+  <!-- Card -->
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div
+      class="overflow-hidden rounded-2xl bg-white shadow-sm border border-slate-200"
+    >
+      <!-- Header -->
+      <div class="flex items-start gap-4 border-b border-slate-200 p-6 lg:p-8">
+        <div
+          class="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-primary"
+        >
+          <!-- icon -->
+          <img src="../../../../assets/images/Overlay.svg" alt="addProject" />
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">
+            Initialize New Project
+          </h2>
+
+          <p class="mt-1 text-slate-500">
+            Define the scope and foundational details of your project.
+          </p>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="projectForm" (ngSubmit)="submit()" class="p-6 lg:p-8">
+        <!-- Project Name -->
+        <div>
+          <label
+            class="mb-2 block text-xs font-bold uppercase tracking-widest text-slate-600"
+          >
+            Project Title
+            <span class="text-red-500">*</span>
+          </label>
+
+          <input
+            formControlName="name"
+            type="text"
+            placeholder="Project Title"
+            class="h-14 w-full rounded-lg border border-slate-300 bg-blue-50 px-4 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+          />
+          @if (
+            projectForm.get("name")?.touched && projectForm.get("name")?.invalid
+          ) {
+            <p class="mt-2 text-sm text-red-600">
+              @if (projectForm.get("name")?.errors?.["required"]) {
+                <span> Project title is required. </span>
+              }
+              @if (projectForm.get("name")?.errors?.["minlength"]) {
+                <span> Project name must be at least 3 characters. </span>
+              }
+              @if (projectForm.get("name")?.errors?.["maxlength"]) {
+                <span> Maximum 100 characters allowed. </span>
+              }
+            </p>
+          }
+        </div>
+
+        <!-- Description -->
+        <div class="mt-8">
+          <div class="mb-2 flex items-center justify-between">
+            <label
+              class="text-xs font-bold uppercase tracking-widest text-slate-600"
+            >
+              Description
+            </label>
+
+            <span class="text-xs text-slate-400"> Optional </span>
+          </div>
+
+          <textarea
+            rows="6"
+            maxlength="500"
+            formControlName="description"
+            placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
+            class="w-full rounded-lg border border-slate-300 bg-blue-50 p-4 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
+          >
+          </textarea>
+
+          <div class="mt-2 flex items-center justify-between">
+            @if (projectForm.get("description")?.errors?.["maxlength"]) {
+              <p class="text-sm text-red-600">Maximum 500 characters.</p>
+            }
+
+            <span class="ml-auto text-sm text-slate-500">
+              {{ projectForm.get("description")?.value?.length || 0 }} / 500
+            </span>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div
+          class="mt-10 flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <a
+            routerLink="/projects"
+            class="font-semibold text-slate-700 hover:text-primary cursor-pointer transition"
+          >
+            Back
+          </a>
+
+          <button 
+            type="submit"
+            class="h-12 bg-blue-700 px-8 text-white font-semibold shadow-lg transition disabled:opacity-50"
+          >
+            {{loading ? "Loading..." : "Create Project"}}
+          </button>
+        </div>
+      </form>
+
+      <!-- Footer -->
+      <div class="border-t border-slate-200 bg-slate-50 px-6 py-5 lg:px-8">
+        <div class="flex items-start gap-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="mt-1 h-5 w-5 text-slate-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M12 22a10 10 0 100-20 10 10 0 000 20z"
+            />
+          </svg>
+
+          <p class="text-sm text-slate-500">
+            <span class="font-semibold text-slate-700"> Pro Tip: </span>
+
+            You can invite project members and assign epics immediately after
+            the initial creation process.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

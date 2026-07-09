@@ -1,0 +1,11 @@
+@for (item of menuItems; track item.path) {
+  <a
+    [routerLink]="['/project', projectId, item.path]"
+    routerLinkActive="bg-blue-50 text-blue-700"
+    class="flex items-center gap-3 p-3 rounded-lg transition"
+  >
+    <img [src]="item.icon" />
+
+    <span>{{ item.label }}</span>
+  </a>
+}

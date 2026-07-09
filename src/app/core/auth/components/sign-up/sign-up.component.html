@@ -1,0 +1,224 @@
+<div class="flex items-center justify-center min-h-screen px-4 py-10">
+  <div class="bg-white rounded-3xl w-full max-w-150 p-6 md:p-12 shadow-sm">
+    <h1 class="text-4xl font-bold text-[#001B48] mb-3 text-center">
+      Create your workspace
+    </h1>
+
+    <p class="text-center text-slate-500 mb-10">
+      Join the editorial approach to task management.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
+      <!-- Name -->
+
+      <div>
+        <label class="label"> NAME </label>
+
+        <input
+          class="input"
+          formControlName="name"
+          placeholder="Enter your full name"
+        />
+
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <p class="error">Enter a valid name.</p>
+        }
+      </div>
+
+      <!-- Email -->
+
+      <div>
+        <label class="label"> EMAIL </label>
+
+        <input
+          class="input"
+          type="email"
+          formControlName="email"
+          placeholder="yourname@company.com"
+        />
+
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <p class="error">Invalid email address.</p>
+        }
+      </div>
+
+      <!-- Job -->
+
+      <div>
+        <label class="label"> JOB TITLE (OPTIONAL) </label>
+
+        <input
+          class="input"
+          formControlName="jobTitle"
+          placeholder="e.g. Project Manager"
+        />
+      </div>
+
+      <!-- Password Row -->
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="label"> PASSWORD </label>
+
+          <div class="relative">
+            <input
+              [type]="hidePassword ? 'password' : 'text'"
+              class="input pr-12"
+              formControlName="password"
+              placeholder="Password"
+            />
+
+            <button
+              type="button"
+              class="absolute right-4 top-1/2 -translate-y-1/2"
+              (click)="hidePassword = !hidePassword"
+            >
+              @if (hidePassword) {
+                <img
+                  src="../../../../../assets/images/eye-slash.svg"
+                  alt="Hide Password"
+                />
+              } @else {
+                <img
+                  src="../../../../../assets/images/eye.svg"
+                  class="mt-2"
+                  alt="Show Password"
+                />
+              }
+            </button>
+          </div>
+        </div>
+
+        <div class="relative">
+          <label class="label"> CONFIRM PASSWORD </label>
+
+          <input
+            [type]="hideConfirmPassword ? 'password' : 'text'"
+            class="input"
+            formControlName="confirmPassword"
+            placeholder="Repeat your password"
+          />
+           <button
+              type="button"
+              class="absolute right-4 top-2/3 -translate-y-1/2"
+              (click)="hideConfirmPassword = !hideConfirmPassword"
+            >
+              @if (hideConfirmPassword) {
+                <img
+                  src="../../../../../assets/images/eye-slash.svg"
+                  alt="Hide Password"
+                />
+              } @else {
+                <img
+                  src="../../../../../assets/images/eye.svg"
+                  class="mt-2"
+                  alt="Show Password"
+                />
+              }
+            </button>
+        </div>
+      </div>
+
+      <!-- Password Requirements -->
+      <div class="rounded-2xl bg-indigo-50 border border-indigo-100 p-5">
+        <h3 class="mb-4 text-sm font-semibold text-slate-700">
+          Password requirements
+        </h3>
+        <div class="space-y-3">
+          <!-- 8 Characters -->
+          <div class="flex items-center gap-3">
+            @if (hasMinLength) {
+              <img
+                src="../../../../../assets/images/checkboxChecked.svg"
+                alt="checkboxChecked"
+              />
+            } @else if (!hasMinLength) {
+              <img
+                src="../../../../../assets/images/checkbox.svg"
+                alt="checkbox"
+              />
+            }
+            <span
+              class="text-sm"
+              [ngClass]="
+                hasMinLength ? 'text-green-600 font-medium' : 'text-slate-500'
+              "
+            >
+              At least 8 characters
+            </span>
+          </div>
+
+          <!-- Upper + Lower + Number -->
+          <div class="flex items-center gap-3">
+            @if (hasUpperLowerNumber) {
+              <img
+                src="../../../../../assets/images/checkboxChecked.svg"
+                alt="checkboxChecked"
+              />
+            } @else if (!hasUpperLowerNumber) {
+              <img
+                src="../../../../../assets/images/checkbox.svg"
+                alt="checkbox"
+              />
+            }
+            <span
+              class="text-sm"
+              [ngClass]="
+                hasUpperLowerNumber
+                  ? 'text-green-600 font-medium'
+                  : 'text-slate-500'
+              "
+            >
+              One uppercase, one lowercase and one number
+            </span>
+          </div>
+
+          <!-- Special Character -->
+          <div class="flex items-center gap-3">
+            @if (hasSpecialChar) {
+              <img
+                src="../../../../../assets/images/checkboxChecked.svg"
+                alt="checkboxChecked"
+              />
+            } @else if (!hasSpecialChar) {
+              <img
+                src="../../../../../assets/images/checkbox.svg"
+                alt="checkbox"
+              />
+            }
+            <span
+              class="text-sm"
+              [ngClass]="
+                hasSpecialChar ? 'text-green-600 font-medium' : 'text-slate-500'
+              "
+            >
+              One special character
+            </span>
+          </div>
+        </div>
+      </div>
+
+      @if (form.errors?.["passwordMismatch"]) {
+        <p class="text-red-500 text-sm">Passwords do not match.</p>
+      }
+      @if (serverError) {
+        <p class="text-red-500 text-sm text-center">{{ serverError }}</p>
+      }
+
+      <button
+        type="submit"
+        class="w-full bg-blue-700 hover:bg-blue-800 text-white py-4 rounded-xl font-semibold"
+      >
+        {{loading ? 'Creating Account...' : 'Create Account'}}
+      </button>
+    </form>
+
+    <p class="text-center mt-10 text-slate-500">
+      Already have an account?
+
+      <a routerLink="/login" class="text-blue-700 font-semibold ml-2">
+        Log in
+      </a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,158 @@
+@if (loading) {
+  <app-project-skeleton />
+} @else if (errMsg) {
+  <div class="flex flex-col items-center justify-center py-24">
+    <div
+      class="w-20 h-20 rounded-2xl bg-red-100 flex items-center justify-center"
+    >
+      <img src="../../../../assets/images/error.svg" alt="Error" />
+    </div>
+
+    <h2 class="mt-8 text-4xl font-bold text-[#0F2B63]">Something went wrong</h2>
+
+    <p class="mt-4 text-center max-w-md text-gray-500">
+      We're having trouble retrieving your projects right now. Please try again
+      in a moment.
+    </p>
+
+    <button
+      (click)="getAllProjects()"
+      class="mt-8 h-12 px-8 rounded-lg bg-blue-700 text-white font-semibold"
+    >
+      Retry Connection
+    </button>
+  </div>
+} @else if (projects?.length == 0) {
+  <app-empty-project />
+} @else {
+  <section class="min-h-screen bg-[#F8FAFC] p-6 lg:p-10">
+    <!-- Header -->
+    <div
+      class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
+    >
+      <div>
+        <h1 class="text-4xl font-bold text-[#0F2B63]">Projects</h1>
+
+        <p class="mt-2 text-gray-500">Manage and curate your projects</p>
+      </div>
+
+      <!-- Desktop Button -->
+      <a
+        routerLink="/projects/add"
+        class="hidden lg:flex h-14 px-7 rounded-lg bg-[#165DFF] text-white font-semibold items-center gap-3 shadow-lg hover:bg-blue-700 transition"
+      >
+        <img
+          src="../../../../assets/images/plus.svg"
+          alt="plus"
+          class="w-4 h-4"
+        />
+        Create New Project
+      </a>
+    </div>
+
+    <!-- Grid -->
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <!-- Card -->
+
+      @for (project of projects; track project.id) {
+        <div
+          class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-lg duration-300 cursor-pointer flex flex-col justify-between"
+        >
+          <div class="p-6">
+            <div class="flex justify-between">
+              <h3 class="font-bold text-2xl text-[#102A5B]">
+                {{ project.name }}
+              </h3>
+
+              <div class="flex gap-3">
+                <button
+                  (click)="openProject(project.id)"
+                  class="hover:text-blue-700"
+                >
+                  <img
+                    src="../../../../assets/images/eye.svg"
+                    alt="Edit"
+                    class="w-6 h-6 mt-2"
+                  />
+                </button>
+                <button
+                  [routerLink]="['/projects/edit', project.id]"
+                  class="hover:text-blue-700"
+                >
+                  <img
+                    src="../../../../assets/images/edit.png"
+                    alt="Edit"
+                    class="w-5 h-5"
+                  />
+                </button>
+
+                <button class="hover:text-blue-700">
+                  <img
+                    src="../../../../assets/images/delete.png"
+                    alt="Delete"
+                    class="w-5 h-5"
+                  />
+                </button>
+              </div>
+            </div>
+
+            <p class="mt-5 text-gray-600 leading-8 line-clamp-3 min-h-[80px]">
+              {{ project.description }}
+            </p>
+          </div>
+
+          <div class="px-6 py-5 flex items-center justify-between text-sm">
+            <span class="uppercase text-gray-400 font-semibold">
+              Created At
+            </span>
+
+            <span class="text-gray-700">
+              {{ project.created_at | date: "dd MMM yyyy" }}
+            </span>
+          </div>
+        </div>
+      }
+
+      <!-- Add Card Desktop -->
+
+      <a
+        routerLink="/projects/add"
+        class="hidden xl:flex items-center justify-center border-2 border-dashed rounded-xl bg-white hover:border-blue-600 transition min-h-[270px]"
+      >
+        <div class="text-center">
+          <div
+            class="mx-auto w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center"
+          >
+            <img
+              src="../../../../assets/images/plus.svg"
+              alt="plus"
+              class="w-4 h-4"
+            />
+          </div>
+
+          <h3 class="mt-5 uppercase tracking-widest font-bold text-slate-600">
+            Add Project
+          </h3>
+        </div>
+      </a>
+    </div>
+
+    <!-- Pagination -->
+
+
+
+    <!-- Mobile -->
+
+    <a
+      routerLink="/projects/add"
+      class="fixed bottom-24 right-6 lg:hidden w-16 h-16 rounded-2xl bg-blue-700 text-white shadow-2xl flex items-center justify-center"
+    >
+      <img
+        src="../../../../assets/images/plusBorder.svg"
+        alt="plus"
+        class="w-4 h-4"
+      />
+    </a>
+  </section>
+}
