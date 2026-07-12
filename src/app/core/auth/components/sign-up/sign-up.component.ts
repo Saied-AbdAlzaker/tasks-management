@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -10,15 +10,26 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { InputComponent } from '../../../../shared/ui/input/input.component';
+import { PasswordRequirementsComponent } from '../../../../shared/ui/password-requirements/password-requirements.component';
+import { CardComponent } from "../../../../shared/ui/card/card.component";
 
 @Component({
   selector: 'app-sign-up',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    RouterLink,
+    InputComponent,
+    PasswordRequirementsComponent,
+    CardComponent
+],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css',
   standalone: true,
 })
-export class SignUpComponent {
+export class SignUpComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -28,7 +39,22 @@ export class SignUpComponent {
   loading: boolean = false;
   serverError: string | null = null;
 
-  form = this.fb.group(
+  passwordRequirements = [
+    {
+      label: 'At least 8 characters',
+      completed: false,
+    },
+    {
+      label: 'One uppercase, one lowercase and one number',
+      completed: false,
+    },
+    {
+      label: 'One special character',
+      completed: false,
+    },
+  ];
+
+  form = this.fb.nonNullable.group(
     {
       name: [
         '',
@@ -48,8 +74,6 @@ export class SignUpComponent {
         '',
         [
           Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(64),
           Validators.pattern(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[^\s]+$/,
           ),
@@ -68,6 +92,10 @@ export class SignUpComponent {
     const confirm = control.get('confirmPassword')?.value;
 
     return password === confirm ? null : { passwordMismatch: true };
+  }
+
+  ngOnInit(): void {
+    this.changeRequiremntsPassword();
   }
 
   submit() {
@@ -104,17 +132,36 @@ export class SignUpComponent {
     });
   }
 
-  get password() {
-    return this.form.controls.password.value ?? '';
-  }
-  get hasMinLength(): boolean {
-    return this.password.length >= 8;
-  }
-  get hasUpperLowerNumber(): boolean {
-    return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(this.password);
+  changeRequiremntsPassword() {
+    this.form.get('password')?.valueChanges.subscribe((password) => {
+      this.passwordRequirements = [
+        {
+          label: 'At least 8 characters',
+          completed: password?.length >= 8,
+        },
+        {
+          label: 'One uppercase, one lowercase and one number',
+          completed: /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password),
+        },
+        {
+          label: 'One special character',
+          completed: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+        },
+      ];
+    });
   }
 
-  get hasSpecialChar(): boolean {
-    return /(?=.*[!@#$%^&*])/.test(this.password);
-  }
+  // get password() {
+  //   return this.form.controls.password.value ?? '';
+  // }
+  // get hasMinLength(): boolean {
+  //   return this.password.length >= 8;
+  // }
+  // get hasUpperLowerNumber(): boolean {
+  //   return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(this.password);
+  // }
+
+  // get hasSpecialChar(): boolean {
+  //   return /(?=.*[!@#$%^&*])/.test(this.password);
+  // }
 }

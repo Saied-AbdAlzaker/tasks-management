@@ -3,10 +3,20 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { ButtonComponent } from '../../../../shared/ui/button/button.component';
+import { CardComponent } from '../../../../shared/ui/card/card.component';
+import { InputComponent } from '../../../../shared/ui/input/input.component';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    ButtonComponent,
+    CardComponent,
+    InputComponent,
+  ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css',
   standalone: true,
@@ -28,8 +38,6 @@ export class SignInComponent {
       '',
       [
         Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(64),
         Validators.pattern(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[^\s]+$/,
         ),
@@ -52,12 +60,11 @@ export class SignInComponent {
 
     this.authService.signIn(payload).subscribe({
       next: (res: any) => {
+        console.log(res);
+        
         if (res.access_token) {
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('token', res.access_token);
-            localStorage.setItem('userData', JSON.stringify(res.user));
-            this.authService.decodedToken();
-          }
+          localStorage.setItem('token', res.access_token);
+          this.authService.userInfo();
 
           this.router.navigate(['/projects']);
         }

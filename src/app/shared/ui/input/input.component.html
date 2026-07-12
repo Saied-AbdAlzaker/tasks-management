@@ -1,0 +1,83 @@
+<div class="space-y-2">
+  <!-- Label -->
+
+  <label
+    class="block text-xs font-semibold uppercase tracking-wide text-slate-500"
+  >
+    {{ label }}
+
+    @if (optional) {
+      <span class="font-normal text-slate-400"> (Optional) </span>
+    }
+  </label>
+
+  <!-- Input -->
+
+  <div class="relative">
+    <input
+      [formControl]="control"
+      [type]="inputType"
+      [placeholder]="placeholder"
+      class="w-full rounded-md border bg-[#EEF3FF] px-4 py-3 pr-10 outline-none transition-all focus:border-blue-600"
+      [class.border-red-500]="control?.invalid && control?.touched"
+      [class.border-green-600]="control?.valid"
+    />
+
+    <!-- Password -->
+
+    @if (showPasswordToggle) {
+      <button
+        type="button"
+        class="absolute right-4 top-1/2 -translate-y-1/2"
+        (click)="hidePassword = !hidePassword"
+      >
+        @if (hidePassword) {
+          <img
+            src="../../../../../assets/images/eye-slash.svg"
+            alt="Hide Password"
+          />
+        } @else {
+          <img
+            src="../../../../../assets/images/eye.svg"
+            class="mt-2"
+            alt="Show Password"
+          />
+        }
+      </button>
+    }
+  </div>
+
+  <!-- Hint -->
+
+  @if (hint) {
+    <p class="text-xs text-slate-400">
+      {{ hint }}
+    </p>
+  }
+
+  <!-- Validation -->
+
+  @if (control?.errors && control?.touched) {
+    <div class="text-xs text-red-600">
+      @if (control?.hasError("required")) {
+        Required Field
+      }
+
+      @if (control?.hasError("minlength")) {
+        Input should be more than or equal 3 character.
+      }
+
+      @if (control?.hasError("maxlength")) {
+        Input should be less than or equal 50 character.
+      }
+
+      @if (control?.hasError("email")) {
+        Invalid email address.
+      }
+
+      @if (control?.hasError("pattern")) {
+        <ng-content></ng-content>
+      }
+    </div>
+  }
+</div>

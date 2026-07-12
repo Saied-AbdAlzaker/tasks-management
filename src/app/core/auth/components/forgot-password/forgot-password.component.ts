@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { InputComponent } from "../../../../shared/ui/input/input.component";
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, InputComponent],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss',
   standalone: true,
@@ -14,7 +15,6 @@ import { CommonModule } from '@angular/common';
 export class ForgotPasswordComponent {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
-  private router = inject(Router);
   serverError: string | null = null;
   loading = false;
   success = false;

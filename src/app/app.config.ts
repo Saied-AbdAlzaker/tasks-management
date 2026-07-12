@@ -4,10 +4,11 @@ import {
   withInMemoryScrolling,
   withViewTransitions,
 } from '@angular/router';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideToastr } from 'ngx-toastr';
+import { headersInterceptor } from './core/inerceptors/headers.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,7 +21,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'top',
       }),
     ),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(),withInterceptors([headersInterceptor])),
     provideToastr({
       progressBar: true,
       closeButton: true,
