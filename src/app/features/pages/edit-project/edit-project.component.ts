@@ -5,11 +5,15 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectService } from '../../services/project/project.service';
 import { finalize } from 'rxjs';
 import { CreateProject } from '../../interfaces/project/project';
+import {
+  BreadcrumbComponent,
+  BreadcrumbItem,
+} from '../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-edit-project',
   standalone: true,
-  imports: [ReactiveFormsModule,RouterLink],
+  imports: [ReactiveFormsModule, BreadcrumbComponent],
   templateUrl: './edit-project.component.html',
   styleUrl: './edit-project.component.scss',
 })
@@ -21,8 +25,11 @@ export class EditProjectComponent {
   private projectService = inject(ProjectService);
 
   loading = false;
+  project: any;
 
   projectId!: string;
+  projectName!: string;
+  breadcrumbItems: BreadcrumbItem[] = [];
 
   projectForm = this.fb.group({
     name: [
@@ -47,12 +54,26 @@ export class EditProjectComponent {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (res) => {
-          const project = res[0];
-
+          this.project = res[0];
+          console.log(res);
           this.projectForm.patchValue({
-            name: project.name,
-            description: project.description,
+            name: this.project.name,
+            description: this.project.description,
           });
+
+          // breadcrumb
+          this.breadcrumbItems = [
+            {
+              label: 'PROJECTS',
+              url: '/',
+            },
+            {
+              label: this.project.name,
+            },
+            {
+              label: 'EDIT',
+            },
+          ];
         },
       });
   }

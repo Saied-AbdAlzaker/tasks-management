@@ -1,0 +1,22 @@
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="hidden lg:flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+    @for (item of items; track $index; let last = $last) {
+      <li class="flex items-center gap-2">
+        @if (!last) {
+          <a
+            [routerLink]="item.url"
+            class="hover:text-blue-600 transition-colors"
+          >
+            {{ item.label }}
+          </a>
+
+          <span>></span>
+        } @else {
+          <span class="font-semibold text-slate-500">
+            {{ item.label }}
+          </span>
+        }
+      </li>
+    }
+  </ol>
+</nav>

@@ -43,6 +43,13 @@
 
 @if (!loading && !error) {
   <div class="hidden overflow-hidden rounded-2xl bg-white lg:block">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 mb-3">
+      <app-breadcrumb [items]="breadcrumbItems"> </app-breadcrumb>
+
+      <h2 class="text-2xl lg:text-4xl font-bold text-slate-900">
+        Project Members
+      </h2>
+    </div>
     <table class="w-full">
       <thead class="bg-slate-100">
         <tr>

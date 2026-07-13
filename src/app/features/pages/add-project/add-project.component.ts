@@ -6,11 +6,12 @@ import { finalize } from 'rxjs';
 import { ProjectService } from '../../services/project/project.service';
 import { CreateProject } from '../../interfaces/project/project';
 import { ToastrService } from 'ngx-toastr';
+import { BreadcrumbItem, BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-add-project',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, BreadcrumbComponent],
   templateUrl: './add-project.component.html',
   styleUrl: './add-project.component.scss',
 })
@@ -61,4 +62,14 @@ export class AddProjectComponent {
         },
       });
   }
+  // breadcrumb
+   breadcrumbItems: BreadcrumbItem[] = [
+    {
+      label: 'PROJECTS',
+      url: '/'
+    },
+    {
+      label: 'ADD NEW PROJECT'
+    }
+  ];
 }

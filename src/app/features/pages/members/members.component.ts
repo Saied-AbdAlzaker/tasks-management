@@ -2,11 +2,15 @@ import { Component, inject } from '@angular/core';
 import { ProjectMembersService } from '../../services/projectMembers/project-members.service';
 import { finalize } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import {
+  BreadcrumbComponent,
+  BreadcrumbItem,
+} from '../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [],
+  imports: [BreadcrumbComponent],
   templateUrl: './members.component.html',
   styleUrl: './members.component.scss',
 })
@@ -17,6 +21,9 @@ export class MembersComponent {
   projectId!: string;
   members: any;
   userNamePhoto: any;
+
+  projectMember!: string;
+  breadcrumbItems: BreadcrumbItem[] = [];
 
   private projectMembersService = inject(ProjectMembersService);
   private activatedRoute = inject(ActivatedRoute);
@@ -44,9 +51,24 @@ export class MembersComponent {
           console.log(this.members);
           this.userNamePhoto = res.map((m) => {
             m.metadata.name.slice(0, 2).toUpperCase();
+            console.log(m);
+            
           });
           console.log(this.userNamePhoto);
-          
+
+           // breadcrumb
+          this.breadcrumbItems = [
+            {
+              label: 'PROJECTS',
+              url: '/',
+            },
+            {
+              label: this.members.name,
+            },
+            {
+              label: 'MEMBERS',
+            },
+          ];
         },
         error: () => {
           this.error = true;
